@@ -57,7 +57,9 @@
 </template>
 
 <template name="geoPortal">
-
+    <div class="map-container">
+        {{> googleMap name="placesLocationMap" options=placesLocationMapOptions}}
+    </div>
 </template>
 
 <template name="notFoundLayout">

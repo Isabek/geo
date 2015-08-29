@@ -2,6 +2,36 @@ var Places = new Mongo.Collection('places');
 
 if (Meteor.isClient) {
 
+
+  Meteor.startup(function () {
+    GoogleMaps.load();
+  });
+
+  Template.geoPortal.helpers({
+    placesLocationMapOptions: function () {
+      if (GoogleMaps.loaded()) {
+        return {
+          center: new google.maps.LatLng(42.87244164855117, 74.58446502685547),
+          zoom: 13
+        };
+      }
+    }
+  });
+
+  Template.geoPortal.onCreated(function () {
+    GoogleMaps.ready('placesLocationMap', function (map) {
+
+      Places.find().map(function (place) {
+        new google.maps.Marker({
+          map: map.instance,
+          draggable: false,
+          position: new google.maps.LatLng(place.location.lat, place.location.lng)
+        });
+      });
+
+    });
+  });
+
   Template.header.helpers({
     placesUrl: function () {
       return FlowRouter.path("places");
