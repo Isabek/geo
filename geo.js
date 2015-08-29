@@ -1,18 +1,68 @@
 var Places = new Mongo.Collection('places');
 
 if (Meteor.isClient) {
-
-
   Meteor.startup(function () {
     GoogleMaps.load();
   });
+
+
+  var checkedPlaceTypes = [], markers = [], placeName = null;
+
+  Template.filterPlaces.events({
+    'change .checkbox input': function (event) {
+      var value = event.target.value;
+      var index = checkedPlaceTypes.indexOf(value);
+      if (index > -1) checkedPlaceTypes.splice(index, 1);
+      else checkedPlaceTypes.push(value);
+
+      filterPlaces(checkedPlaceTypes, placeName);
+
+    },
+    "blur input:text": function (event) {
+      placeName = event.target.value;
+      filterPlaces(checkedPlaceTypes, placeName);
+    }
+  });
+
+  function setMapOnAll(map) {
+    for (var i = 0; i < markers.length; i++) {
+      markers[i].setMap(map);
+    }
+  }
+
+  function filterPlaces(placeTypes, placeName) {
+
+    var criteria = {};
+    if (placeTypes.length) criteria['type'] = {$in: placeTypes};
+    if (placeName) criteria["name"] = new RegExp(placeName, "i");
+    setMapOnAll(null);
+
+    markers = [];
+
+    Places.find(criteria).map(function (place) {
+      var marker = new google.maps.Marker({
+        map: GoogleMaps.maps.placesLocationMap.instance,
+        draggable: false,
+        position: new google.maps.LatLng(place.location.lat, place.location.lng)
+      });
+
+      markers.push(marker);
+    });
+
+  }
 
   Template.geoPortal.helpers({
     placesLocationMapOptions: function () {
       if (GoogleMaps.loaded()) {
         return {
           center: new google.maps.LatLng(42.87244164855117, 74.58446502685547),
-          zoom: 13
+          zoom: 13,
+          panControl: false,
+          zoomControl: false,
+          mapTypeControl: false,
+          scaleControl: false,
+          streetViewControl: false,
+          overviewMapControl: false
         };
       }
     }
@@ -20,15 +70,14 @@ if (Meteor.isClient) {
 
   Template.geoPortal.onCreated(function () {
     GoogleMaps.ready('placesLocationMap', function (map) {
-
       Places.find().map(function (place) {
-        new google.maps.Marker({
+        var marker = new google.maps.Marker({
           map: map.instance,
           draggable: false,
           position: new google.maps.LatLng(place.location.lat, place.location.lng)
         });
+        markers.push(marker);
       });
-
     });
   });
 

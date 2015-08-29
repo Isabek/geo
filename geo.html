@@ -57,8 +57,35 @@
 </template>
 
 <template name="geoPortal">
+    {{> filterPlaces }}
     <div class="map-container">
         {{> googleMap name="placesLocationMap" options=placesLocationMapOptions}}
+    </div>
+</template>
+
+<template name="filterPlaces">
+    <div class="search-box" style="display: block;">
+        <div class="search-box-dialog">
+            <div class="search-box-content">
+                <div class="search-box-body">
+                    <form>
+                        <div class="form-group">
+                            <input type="text" placeholder="Название объекта" class="form-control"
+                                   style="border-radius: 0 !important;" id="place-name">
+                        </div>
+                        <div class="form-group">
+                            {{#each placeTypesOptions }}
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" value="{{value}}">{{label}}
+                                    </label>
+                                </div>
+                            {{/each}}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
