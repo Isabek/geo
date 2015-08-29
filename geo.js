@@ -42,6 +42,15 @@ if (Meteor.isClient) {
     Places.find(criteria).map(function (place) {
       var marker = new google.maps.Marker({
         map: GoogleMaps.maps.placesLocationMap.instance,
+        icon: {
+          path: fontawesome.markers[findPlaceTypeOptionByValue(place.type).icon],
+          scale: 0.4,
+          strokeWeight: 0.5,
+          strokeColor: 'black',
+          strokeOpacity: 1,
+          fillColor: '#f8ae5f',
+          fillOpacity: 1
+        },
         draggable: false,
         position: new google.maps.LatLng(place.location.lat, place.location.lng)
       });
@@ -74,6 +83,15 @@ if (Meteor.isClient) {
         var marker = new google.maps.Marker({
           map: map.instance,
           draggable: false,
+          icon: {
+            path: fontawesome.markers[findPlaceTypeOptionByValue(place.type).icon],
+            scale: 0.4,
+            strokeWeight: 0.5,
+            strokeColor: 'black',
+            strokeOpacity: 1,
+            fillColor: '#f8ae5f',
+            fillOpacity: 1
+          },
           position: new google.maps.LatLng(place.location.lat, place.location.lng)
         });
         markers.push(marker);
@@ -105,15 +123,22 @@ if (Meteor.isClient) {
 
   var placeTypesOptions = function () {
     return [
-      {label: "Транспорт", value: 1},
-      {label: "Учреждение", value: 2},
-      {label: "Природа", value: 3},
-      {label: "Территория", value: 4},
-      {label: "Инфраструктура", value: 5},
-      {label: "Человек", value: 6},
-      {label: "Неопределённый", value: 7}
+      {label: "Транспорт", value: 1, icon: "CAR"},
+      {label: "Учреждение", value: 2, icon: "UNIVERSITY"},
+      {label: "Природа", value: 3, icon: "TREE"},
+      {label: "Территория", value: 4, icon: "GLOBE"},
+      {label: "Инфраструктура", value: 5, icon: "BUILDING"},
+      {label: "Человек", value: 6, icon: "USER"},
+      {label: "Неопределённый", value: 7, icon: "COMPASS"}
     ];
   };
+
+  function findPlaceTypeOptionByValue(value) {
+    return placeTypesOptions().reduce(function (acc, curr) {
+      if (curr.value == value) return curr;
+      return acc;
+    }, null);
+  }
 
   Template.registerHelper("placeTypesOptions", placeTypesOptions);
 
@@ -128,10 +153,7 @@ if (Meteor.isClient) {
             key: 'type',
             label: 'Тип',
             fn: function (value, object) {
-              return placeTypesOptions().reduce(function (acc, curr) {
-                if (curr.value == value) acc = curr.label;
-                return acc;
-              }, null);
+              return findPlaceTypeOptionByValue(value) ? findPlaceTypeOptionByValue(value).label : value;
             }
           },
           {key: 'name', label: 'Название'},
