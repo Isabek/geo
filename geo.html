@@ -1,0 +1,121 @@
+<head>
+    <title>Geo</title>
+</head>
+
+<template name="layout">
+    {{> Template.dynamic template=top }}
+    <div class="container">
+        <div class="row">
+            {{> Template.dynamic template=main }}
+        </div>
+    </div>
+</template>
+
+<template name="header">
+    <header class="navbar navbar-inverse navbar-static-top bs-docs-nav" id="top" role="banner">
+        <div class="container">
+            <nav id="bs-navbar" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="{{placesUrl}}">Объекты</a>
+                    </li>
+                    <li>
+                        <a href="{{geoPortalUrl}}">Геопортал</a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="#">Выйти</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+</template>
+
+<template name="places">
+    <a href="{{placeAddUrl}}" class="btn btn-primary">Добавить объект</a>
+    {{> reactiveTable settings=settings }}
+</template>
+
+<template name="insertPlaceForm">
+    <div class="col-md-8 col-md-offset-2">
+        <form role="form" method="post" id="place-form">
+            <div class="fields">
+                <div class="form-group">
+                    <label for="type">Тип</label>
+                    <select class="form-control" name="type" id="type">
+                        <option value="1">Транспорт</option>
+                        <option value="2">Учреждение</option>
+                        <option value="3">Природа</option>
+                        <option value="4">Территория</option>
+                        <option value="5">Инфраструктура</option>
+                        <option value="6">Человек</option>
+                        <option value="7">Неопределённый</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="dangerLevel">Уровень опасности</label>
+                    <select class="form-control" name="dangerLevel" id="dangerLevel">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Название</label>
+                <input type="text" placeholder="ФИО человека" class="form-control" name="name" id="name">
+            </div>
+            <div class="form-group">
+                <label for="description">Описание</label>
+                <textarea rows="2" id="description" name="description" class="form-control"></textarea>
+            </div>
+            {{> map }}
+            <input type="submit" class="btn btn-primary" value="Создать объект">
+        </form>
+    </div>
+</template>
+
+<template name="map">
+    <div class="map-container">
+        <label>Местоположение</label>
+        {{> googleMap name="placeLocationMap" options=placeLocationMapOptions}}
+    </div>
+</template>
+
+<template name="geoPortal">
+
+</template>
+
+<template name="notFoundLayout">
+    <div class="container">
+        <div class="col-lg-8 col-lg-offset-2 text-center">
+            <div class="logo">
+                <h1>Уппс, Ошибка 404!</h1>
+            </div>
+            <div class="clearfix"></div>
+            <br>
+            <p class="text-muted">Ой, я сломался. Пожалуйста, попробуйте позже. </p>
+
+            <div class="clearfix"></div>
+            <br>
+            <br>
+            <div class="clearfix"></div>
+            <br>
+            <div class="col-lg-6  col-lg-offset-3">
+                <div class="btn-group btn-group-justified">
+                    <a href="{{ placesUrl }}" class="btn btn-success">Вернуться на главную страницу</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>
