@@ -1,7 +1,7 @@
 var Places = new Mongo.Collection('places');
 
 if (Meteor.isClient) {
-  
+
   Template.header.helpers({
     placesUrl: function () {
       return FlowRouter.path("places");
@@ -24,6 +24,20 @@ if (Meteor.isClient) {
     }
   });
 
+  var placeTypesOptions = function () {
+    return [
+      {label: "Транспорт", value: 1},
+      {label: "Учреждение", value: 2},
+      {label: "Природа", value: 3},
+      {label: "Территория", value: 4},
+      {label: "Инфраструктура", value: 5},
+      {label: "Человек", value: 6},
+      {label: "Неопределённый", value: 7}
+    ];
+  };
+
+  Template.registerHelper("placeTypesOptions", placeTypesOptions);
+
   Template.places.helpers({
     settings: function () {
       return {
@@ -31,7 +45,16 @@ if (Meteor.isClient) {
         rowsPerPage: 15,
         showFilter: false,
         fields: [
-          {key: 'type', label: 'Тип'},
+          {
+            key: 'type',
+            label: 'Тип',
+            fn: function (value, object) {
+              return placeTypesOptions().reduce(function (acc, curr) {
+                if (curr.value == value) acc = curr.label;
+                return acc;
+              }, null);
+            }
+          },
           {key: 'name', label: 'Название'},
           {key: 'dangerLevel', label: 'Уровень опасности'},
           {key: 'description', label: 'Описание'}

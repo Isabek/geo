@@ -1,15 +1,3 @@
-Template.registerHelper("placeTypesOptions", function () {
-  return [
-    {label: "Транспорт", value: 1},
-    {label: "Учреждение", value: 2},
-    {label: "Природа", value: 3},
-    {label: "Территория", value: 4},
-    {label: "Инфраструктура", value: 5},
-    {label: "Человек", value: 6},
-    {label: "Неопределённый", value: 7}
-  ];
-});
-
 Template.registerHelper('dangerLevelOptions', function () {
   return [
     {label: 1, value: 1},
