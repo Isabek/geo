@@ -55,6 +55,17 @@ if (Meteor.isClient) {
         position: new google.maps.LatLng(place.location.lat, place.location.lng)
       });
 
+      var infoWindow = new google.maps.InfoWindow();
+      google.maps.event.addListener(marker, 'click', function () {
+        var content = Blaze.toHTMLWithData(Template.placeInfoWindow, {
+          place: place,
+          type: findPlaceTypeOptionByValue(place.type).label
+        });
+
+        infoWindow.setContent(content);
+        infoWindow.open(GoogleMaps.maps.placesLocationMap.instance, marker);
+      });
+
       markers.push(marker);
     });
 
@@ -94,6 +105,18 @@ if (Meteor.isClient) {
           },
           position: new google.maps.LatLng(place.location.lat, place.location.lng)
         });
+
+        var infoWindow = new google.maps.InfoWindow();
+        google.maps.event.addListener(marker, 'click', function () {
+          var content = Blaze.toHTMLWithData(Template.placeInfoWindow, {
+            place: place,
+            type: findPlaceTypeOptionByValue(place.type).label
+          });
+
+          infoWindow.setContent(content);
+          infoWindow.open(map.instance, marker);
+        });
+
         markers.push(marker);
       });
     });
