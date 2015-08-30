@@ -21,7 +21,14 @@
                                 href="{{pathFor 'geo-portal'}}">Геопортал</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        {{> atNavButton}}
+                        <li>
+                            {{#if currentUser}}
+                                <a style="color: white !important;">{{currentUser.username}}</a>
+                            {{/if}}
+                        </li>
+                        <li>
+                            {{> atNavButton}}
+                        </li>
                     </ul>
                 </div>
             </div>
