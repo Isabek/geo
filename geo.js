@@ -39,6 +39,7 @@ if (Meteor.isClient) {
 
     markers = [];
 
+    var infoWindow = new google.maps.InfoWindow();
     Places.find(criteria).map(function (place) {
       var marker = new google.maps.Marker({
         map: GoogleMaps.maps.placesLocationMap.instance,
@@ -55,7 +56,6 @@ if (Meteor.isClient) {
         position: new google.maps.LatLng(place.location.lat, place.location.lng)
       });
 
-      var infoWindow = new google.maps.InfoWindow();
       google.maps.event.addListener(marker, 'click', function () {
         var content = Blaze.toHTMLWithData(Template.placeInfoWindow, {
           place: place,
@@ -90,6 +90,8 @@ if (Meteor.isClient) {
 
   Template.geoPortal.onCreated(function () {
     GoogleMaps.ready('placesLocationMap', function (map) {
+
+      var infoWindow = new google.maps.InfoWindow();
       Places.find().map(function (place) {
         var marker = new google.maps.Marker({
           map: map.instance,
@@ -106,7 +108,6 @@ if (Meteor.isClient) {
           position: new google.maps.LatLng(place.location.lat, place.location.lng)
         });
 
-        var infoWindow = new google.maps.InfoWindow();
         google.maps.event.addListener(marker, 'click', function () {
           var content = Blaze.toHTMLWithData(Template.placeInfoWindow, {
             place: place,
@@ -120,28 +121,6 @@ if (Meteor.isClient) {
         markers.push(marker);
       });
     });
-  });
-
-  Template.header.helpers({
-    placesUrl: function () {
-      return FlowRouter.path("places");
-    },
-    geoPortalUrl: function () {
-      return FlowRouter.path("geo-portal");
-    }
-  });
-
-  Template.notFoundLayout.helpers({
-    placesUrl: function () {
-      return FlowRouter.path("places");
-    }
-  });
-
-
-  Template.places.helpers({
-    placeAddUrl: function () {
-      return FlowRouter.path("places-add");
-    }
   });
 
   var placeTypesOptions = function () {

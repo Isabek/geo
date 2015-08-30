@@ -1,0 +1,6 @@
+<template name="geoPortal">
+    {{> filterPlaces }}
+    <div class="map-container">
+        {{> googleMap name="placesLocationMap" options=placesLocationMapOptions}}
+    </div>
+</template>

@@ -13,9 +13,8 @@ Template.registerHelper('dangerLevelOptions', function () {
   ];
 });
 
-Template.insertPlaceForm.helpers({
+Template.placesAdd.helpers({
   placeFormSchema: function () {
     return Schema.place;
   }
 });
-

@@ -1,0 +1,15 @@
+<template name="placesAdd">
+    {{#autoForm schema=placeFormSchema id="placeForm" type="method" meteormethod="savePlace"}}
+        <fieldset>
+            <legend>Добавление объекта</legend>
+            {{> afQuickField name="type" options=placeTypesOptions firstOption="Выберите тип объекта" }}
+            {{> afQuickField name="name"}}
+            {{> afQuickField name="dangerLevel" options=dangerLevelOptions firstOption="Выберите уровень опасности"}}
+            {{> afQuickField name="description" rows=2}}
+            {{> afQuickField name="location"}}
+            <div>
+                <button type="submit" class="btn btn-primary">Создать объект</button>
+            </div>
+        </fieldset>
+    {{/autoForm}}
+</template>
