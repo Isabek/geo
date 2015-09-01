@@ -1,14 +1,14 @@
-<template name="placesAdd">
-    {{#autoForm collection="Places" id="placeForm" type="insert"}}
+<template name="placesEdit">
+    {{#autoForm collection="Places" id="placeForm" type="update" doc=this}}
         <fieldset>
-            <legend>Добавление объекта</legend>
+            <legend>Редактирование объекта</legend>
             {{> afQuickField name="type" firstOption="Выберите тип объекта" }}
             {{> afQuickField name="name"}}
             {{> afQuickField name="dangerLevel"  firstOption="Выберите уровень опасности"}}
             {{> afQuickField name="description" rows=2}}
             {{> afQuickField name="location"}}
             <div>
-                <button type="submit" class="btn btn-primary">Создать объект</button>
+                <button type="submit" class="btn btn-primary">Редактировать объект</button>
             </div>
         </fieldset>
     {{/autoForm}}

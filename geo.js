@@ -1,5 +1,3 @@
-var Places = new Mongo.Collection('places');
-
 if (Meteor.isClient) {
   Meteor.startup(function () {
     GoogleMaps.load();
@@ -10,7 +8,7 @@ if (Meteor.isClient) {
 
   Template.filterPlaces.events({
     'change .checkbox input': function (event) {
-      var value = event.target.value;
+      var value = +event.target.value;
       var index = checkedPlaceTypes.indexOf(value);
       if (index > -1) checkedPlaceTypes.splice(index, 1);
       else checkedPlaceTypes.push(value);
@@ -41,6 +39,12 @@ if (Meteor.isClient) {
 
     var infoWindow = new google.maps.InfoWindow();
     Places.find(criteria).map(function (place) {
+
+      var location = {
+        lat: place.location.split(",")[0],
+        lng: place.location.split(",")[1]
+      };
+
       var marker = new google.maps.Marker({
         map: GoogleMaps.maps.placesLocationMap.instance,
         icon: {
@@ -53,7 +57,7 @@ if (Meteor.isClient) {
           fillOpacity: 1
         },
         draggable: false,
-        position: new google.maps.LatLng(place.location.lat, place.location.lng)
+        position: new google.maps.LatLng(location.lat, location.lng)
       });
 
       google.maps.event.addListener(marker, 'click', function () {
@@ -93,6 +97,12 @@ if (Meteor.isClient) {
 
       var infoWindow = new google.maps.InfoWindow();
       Places.find().map(function (place) {
+
+        var location = {
+          lat: place.location.split(",")[0],
+          lng: place.location.split(",")[1]
+        };
+
         var marker = new google.maps.Marker({
           map: map.instance,
           draggable: false,
@@ -105,7 +115,7 @@ if (Meteor.isClient) {
             fillColor: '#f8ae5f',
             fillOpacity: 1
           },
-          position: new google.maps.LatLng(place.location.lat, place.location.lng)
+          position: new google.maps.LatLng(location.lat, location.lng)
         });
 
         google.maps.event.addListener(marker, 'click', function () {
@@ -160,7 +170,13 @@ if (Meteor.isClient) {
           },
           {key: 'name', label: 'Название'},
           {key: 'dangerLevel', label: 'Уровень опасности'},
-          {key: 'description', label: 'Описание'}
+          {key: 'description', label: 'Описание'},
+          {
+            label: "Действия",
+            fn: function (value, place) {
+              return new Spacebars.SafeString('<a href="' + Router.path('places-edit', {_id: place._id}) + '">Редактировать</a>');
+            }
+          }
         ]
       };
     }
@@ -171,24 +187,4 @@ if (Meteor.isServer) {
   Meteor.startup(function () {
     // code to run on server at startup
   });
-
-  Meteor.methods({
-    savePlace: function (place) {
-      check(place, Schema.place);
-
-      var location = place.location.split(",");
-
-      Places.insert({
-        type: place.type,
-        name: place.name,
-        dangerLevel: place.dangerLevel,
-        description: place.description,
-        location: {
-          lat: location[0],
-          lng: location[1]
-        }
-      });
-    }
-  });
-
 }
