@@ -1,0 +1,27 @@
+<template name="placeEditModal">
+    <div id="placeEdit" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                {{#autoForm collection="Places" id="placeForm" type="update" doc=data}}
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Редактирование объекта</h4>
+                    </div>
+                    <div class="modal-body">
+                        <fieldset>
+                            {{> afQuickField name="type" firstOption="Выберите тип объекта" }}
+                            {{> afQuickField name="name"}}
+                            {{> afQuickField name="dangerLevel"  firstOption="Выберите уровень опасности"}}
+                            {{> afQuickField name="description" rows=2}}
+                            {{> afQuickField name="location" }}
+                        </fieldset>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Редактировать объект</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                    </div>
+                {{/autoForm}}
+            </div>
+        </div>
+    </div>
+</template>

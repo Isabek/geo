@@ -86,7 +86,8 @@ if (Meteor.isClient) {
           mapTypeControl: false,
           scaleControl: false,
           streetViewControl: false,
-          overviewMapControl: false
+          overviewMapControl: false,
+          disableDoubleClickZoom: true
         };
       }
     }
@@ -94,6 +95,13 @@ if (Meteor.isClient) {
 
   Template.geoPortal.onCreated(function () {
     GoogleMaps.ready('placesLocationMap', function (map) {
+
+      //map.instance.set("disableDoubleClickZoom", false);
+
+      google.maps.event.addListener(map.instance, "dblclick", function (e) {
+        Modal.show('placeAddModal', {data: {location: (e.latLng.lat() + "," +e.latLng.lng())}});
+
+      });
 
       var infoWindow = new google.maps.InfoWindow();
       Places.find().map(function (place) {
@@ -124,11 +132,20 @@ if (Meteor.isClient) {
             type: findPlaceTypeOptionByValue(place.type).label
           });
 
+          marker._id = place._id;
           infoWindow.setContent(content);
           infoWindow.open(map.instance, marker);
         });
 
+
         markers.push(marker);
+
+        google.maps.event.addListener(marker, "dblclick", function (e) {
+          infoWindow.close(map.instance, marker);
+          var data = Places.findOne({_id: marker._id});
+          Modal.show('placeEditModal', {data: data});
+        });
+
       });
     });
   });

@@ -20,3 +20,4 @@ useraccounts:bootstrap
 accounts-password
 useraccounts:iron-routing
 zimme:iron-router-active
+peppelg:bootstrap-3-modal
